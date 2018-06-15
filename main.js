@@ -1,12 +1,13 @@
-let db = require('./db/db');
+
 let express = require('express');
 let path = require('path');
 let app = express();
+var ctrls = require('./controllers');
 app.use(express.static('nbd'));
-
+app.use(express.json());
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname + '/nbd/index.html'));
 })
 
-app.post('/submitOrder', requre);
+app.post('/createOrder', ctrls.createOrder);
 app.listen('8080');

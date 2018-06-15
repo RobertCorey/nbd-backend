@@ -28,4 +28,4 @@ database.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
 exports.db = database;
-exports.order = Order;
+exports.Order = Order;
