@@ -10,23 +10,23 @@ var transporter = nodemailer.createTransport({
   }
 });
 
-function createEmail (to, subject, html) {
+function createEmail(to, subject, html) {
   return mailOptions = {
     from: emailpw.address, // sender address
     to: to, // list of receivers
     subject: subject, // Subject line
-    html: '<p>' + html + '</p>'// plain text body
+    html: '<p>' + html + '</p>' // plain text body
   };
 }
 
 exports.createOrder = function (req, res) {
   //TODO backend validation goes here
-  new db.Order(req.body).save(err =>{
+  new db.Order(req.body).save(err => {
     if (err) {
       res.sendStatus(400);
     } else {
       var emailBody = createEmail('robertbcorey@gmail.com', 'hellofromnewportbike', 'hi were sending you an email');
-      transporter.sendMail(emailBody, err =>{
+      transporter.sendMail(emailBody, err => {
         if (err) {
           res.sendStatus(400);
         } else {
@@ -35,4 +35,17 @@ exports.createOrder = function (req, res) {
       });
     }
   });
+}
+
+
+exports.getAllOrders = function (req, res) {
+  db.Order.find({}, function(err, data) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json({
+        orders: data
+      });
+    }
+  })
 }
