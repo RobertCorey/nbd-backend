@@ -37,9 +37,8 @@ exports.createOrder = function (req, res) {
   });
 }
 
-
 exports.getAllOrders = function (req, res) {
-  db.Order.find({}, function(err, data) {
+  db.Order.find({}, function (err, data) {
     if (err) {
       res.sendStatus(500);
     } else {
@@ -48,4 +47,35 @@ exports.getAllOrders = function (req, res) {
       });
     }
   })
+}
+
+exports.updateQuote = function (req, res) {
+  let id = req.body.id,
+    cost = Number.parseFloat(req.body.cost);
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.cost = cost;
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "Attention Required! Your Newport Bike Delivery Order has been estimated. You need to approve it before delivery!",
+      `The amount is: ${doc.cost}`
+    );
+    console.log(emailBody);
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
 }

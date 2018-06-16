@@ -1,10 +1,11 @@
 exports.panini = {
-  customerName: "tuff",
-  customerEmail: "Fartington",
-  customerPhone: "4015555555",
-  Details: "1 sandwhich please",
-  status: 'new',
-  startAddress: {
+  "customerName": "Robert Corey",
+  "customerEmail": "robertbcorey@gmail.com",
+  "customerPhone": "4015555555",
+  "Details": "1 sandwhich please",
+  "status": "new",
+  "cost": "50",
+  "startAddress": {
     "address_components": [
       {
         "long_name": "# A",
@@ -363,7 +364,7 @@ exports.panini = {
     "vicinity": "186 Thames Street # A, Newport",
     "website": "http://www.thepaninigrill.com/"
   },
-  endAddress: {
+  "endAddress": {
     "address_components": [
       {
         "long_name": "14",

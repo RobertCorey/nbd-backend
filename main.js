@@ -12,4 +12,5 @@ app.get('/', (req, res) => {
 app.post('/createOrder', ctrls.createOrder);
 
 app.post('/getAllOrders', ctrls.getAllOrders);
+app.post('/updateQuote', ctrls.updateQuote);
 app.listen('8080');
