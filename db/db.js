@@ -9,15 +9,34 @@ mongoose.Promise = global.Promise;
 var database = mongoose.connection;
 
 var orderSchema = new Schema({
-  customerName: String,
-  customerEmail: String,
+  customerName:{
+    type: String,
+    required:[true, 'Please enter a customer name']
+  },
+  customerEmail: {
+    type: String,
+    required:[true, 'Please enter a customer email']
   customerPhone: String,
-  startAddress: Object,
-  endAddress: Object,
-  Details: String,
-  cost: Number,
+  startAddress{
+    type: Object,
+    required: [true, 'Please enter a start address']
+  },
+  endAddress: {
+  type: Object,
+  required : [true, 'Please enter a end address']
+},
+  Details: {
+    type: String,
+    required: [true, 'Please enter a description']
+  },
+  cost: {
+    type: Number,
+    required: [true, 'Please enter a cose']
+    default:-1,
+  },
   status: {
     type: String,
+    default: 'new',
     enum: ['new', 'quoted', 'accepted', 'rejected', 'fulfilled']
   },
   createdOn: {type: Date, default: Date.now()}
