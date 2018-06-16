@@ -11,23 +11,26 @@ var database = mongoose.connection;
 var orderSchema = new Schema({
   customerName:{
     type: String,
-    validate:{
-    var testName=validator.isAlphanumeric(v);
-    if (testName===false){
-      message:'${v} is not a valid name, please enter again'
-    }
-  }
-    required:[true, 'Please enter a customer name']
-  },
+    validate: {
+      validator: function(v){
+        var testName=validator.isAlphanumeric(v);
+        if (testName===false){
+          message:'${v} is not a valid name, please enter again'
+        }
+      }
+      required:[true, 'Please enter a customer name']
+    },
 
   customerEmail: {
     type: String,
     validate:{
-    var testEmail=validator.isEmail(v);
-    if (testEmail===false){
-      message:'${v} is not a valid email, please enter again'
+      validator: function{
+      var testEmail=validator.isEmail(v);
+        if (testEmail===false){
+          message:'${v} is not a valid email, please enter again'
+        }
+      }
     }
-  }
     required:[true, 'Please enter a customer email']
   }
 
