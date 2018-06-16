@@ -109,3 +109,33 @@ exports.rejectOrder = function (req, res) {
     });
   });
 }
+
+exports.fulfillOrder = function (req, res) {
+  let id = req.body.id;
+
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.status = "fulfilled";
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "Enjoy Your Order!"
+      `Thanks for using Newport Bike Delivery! It's nbd at Newport Bike Delivery. Ha ha.`
+    );
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
+}
