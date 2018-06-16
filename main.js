@@ -13,4 +13,5 @@ app.post('/createOrder', ctrls.createOrder);
 
 app.post('/getAllOrders', ctrls.getAllOrders);
 app.post('/updateQuote', ctrls.updateQuote);
+app.post('/rejectOrder', ctrls.rejectOrder);
 app.listen('8080');

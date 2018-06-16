@@ -63,7 +63,37 @@ exports.updateQuote = function (req, res) {
       "Attention Required! Your Newport Bike Delivery Order has been estimated. You need to approve it before delivery!",
       `The amount is: ${doc.cost}`
     );
-    console.log(emailBody);
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
+}
+
+exports.rejectOrder = function (req, res) {
+  let id = req.body.id,
+    message = req.body.message;
+
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.status = "rejected";
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "Sorry, We can't accept your order right now"
+      `Reason: ${message}`
+    );
 
     doc.save(function (err) {
       if (err) {
