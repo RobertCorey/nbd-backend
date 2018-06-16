@@ -17,36 +17,35 @@ var orderSchema = new Schema({
         if (testName===false){
           message:'${v} is not a valid name, please enter again'
         }
-      }
+      },
       required:[true, 'Please enter a customer name']
     },
 
   customerEmail: {
     type: String,
     validate:{
-      validator: function{
+      validator: function(v){
       var testEmail=validator.isEmail(v);
         if (testEmail===false){
           message:'${v} is not a valid email, please enter again'
         }
       }
-    }
+    },
     required:[true, 'Please enter a customer email']
-  }
+  },
 
   customerPhone:{
     type: String,
     validate:{
-    validator: function(v){
-      return /\d{3}-\d{3}-\d{4}/.test(v);
-    },
+      validator: function(v){
+        return /\d{3}-\d{3}-\d{4}/.test(v);
+      },
     message:'{Value} is not a valid phone number, please enter again'
-    }
-    required:[true, 'Please enter a phone number'],
-  }
+    },
+    required:[true, 'Please enter a phone number']
+  },
 
-  } ,
-  startAddress{
+  startAddress:{
     type: Object,
     required: [true, 'Please enter a start address']
   },
