@@ -10,9 +10,12 @@ app.get('/', (req, res) => {
 })
 
 app.post('/createOrder', ctrls.createOrder);
+app.get('/customerAcceptOrder', ctrls.customerAcceptOrder);
+app.get('/customerRejectOrder', ctrls.customerRejectOrder);
 
 app.post('/getAllOrders', ctrls.getAllOrders);
 app.post('/updateQuote', ctrls.updateQuote);
-app.post('/rejectOrder', ctrls.rejectOrder);
+app.post('/adminRejectOrder', ctrls.rejectOrder);
 app.post('/fulfillOrder', ctrls.fulfillOrder);
+
 app.listen('8080');
