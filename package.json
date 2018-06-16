@@ -12,6 +12,7 @@
     "express": "^4.16.3",
     "mongoose": "^5.1.5",
     "mongoose-auto-increment": "^5.0.1",
-    "nodemailer": "^4.6.7"
+    "nodemailer": "^4.6.7",
+    "validator": "^10.3.0"
   }
 }

@@ -1,7 +1,7 @@
 var pw = require('./../passwords').database;
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-
+var validator = require('validator');
 var mongoURI = `mongodb://${pw.user}:${pw.password}@${pw.address}`;
 mongoose.connect(mongoURI);
 
@@ -11,12 +11,37 @@ var database = mongoose.connection;
 var orderSchema = new Schema({
   customerName:{
     type: String,
+    var testName=validator.isAlphanumeric(str [, locale]);
+    if (testname===false){
+      message:'{Value} is not a valid name, please enter again'
+    }
+    else{
     required:[true, 'Please enter a customer name']
+  }
   },
+
   customerEmail: {
     type: String,
-    required:[true, 'Please enter a customer email']
-  customerPhone: String,
+    var testEmail=validator.isEmail(v);
+    if (testEmail===false){
+      message:'{Value} is not a valid email, please enter again'
+    }
+    else {
+      required:[true, 'Please enter a customer email']
+    }
+}
+  customerPhone:{
+    type: String,
+    Validate:{
+    validator: function(v){
+      return /\d{3}-\d{3}-\d{4}/.test(v);
+    },
+    message:'{Value} is not a valid phone number, please enter again'
+    }
+    required:[true, 'Please enter a phone number'],
+  }
+
+  } ,
   startAddress{
     type: Object,
     required: [true, 'Please enter a start address']
