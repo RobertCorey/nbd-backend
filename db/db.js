@@ -32,9 +32,11 @@ var orderSchema = new Schema({
   cost: {
     type: Number,
     required: [true, 'Please enter a cose']
+    default:-1,
   },
   status: {
     type: String,
+    default: 'new',
     enum: ['new', 'quoted', 'accepted', 'rejected', 'fulfilled']
   },
   createdOn: {type: Date, default: Date.now()}
