@@ -19,6 +19,7 @@ function createEmail(to, subject, html) {
   };
 }
 
+
 exports.createOrder = function (req, res) {
   //TODO backend validation goes here
   new db.Order(req.body).save(err => {
@@ -37,9 +38,8 @@ exports.createOrder = function (req, res) {
   });
 }
 
-
 exports.getAllOrders = function (req, res) {
-  db.Order.find({}, function(err, data) {
+  db.Order.find({}, function (err, data) {
     if (err) {
       res.sendStatus(500);
     } else {
@@ -48,4 +48,159 @@ exports.getAllOrders = function (req, res) {
       });
     }
   })
+}
+
+exports.updateQuote = function (req, res) {
+  let id = req.body.id,
+    cost = Number.parseFloat(req.body.cost);
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.cost = cost;
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "Attention Required! Your Newport Bike Delivery Order has been estimated. You need to approve it before delivery!",
+      `The amount is: ${doc.cost}`
+    );
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
+}
+
+exports.adminRejectOrder = function (req, res) {
+  let id = req.body.id,
+    message = req.body.message;
+
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.status = "rejected";
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "Sorry, We can't accept your order right now"
+      `Reason: ${message}`
+    );
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
+}
+
+exports.fulfillOrder = function (req, res) {
+  let id = req.body.id;
+
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.status = "fulfilled";
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "Enjoy Your Order!"
+      `Thanks for using Newport Bike Delivery! It's nbd at Newport Bike Delivery. Ha ha.`
+    );
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
+}
+
+exports.customerRejectOrder = function (req, res) {
+  let id = req.query.id,
+    message = req.body.message;
+  if(!id.match(/^[0-9a-fA-F]{24}$/)) {return res.status(500).send('bad id');}
+
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.status = "rejected";
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "You have rejected the quote we provided"
+      `Sorry we were not able to accomodate your request. Try texting or calling 4012398922 to talk to a real person.`
+    );
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
+}
+
+exports.customerAcceptOrder = function (req, res) {
+  let id = req.query.id,
+    message = req.body.message;
+  if(!id.match(/^[0-9a-fA-F]{24}$/)) {return res.status(500).send('bad id');}
+
+  db.Order.findById(id, function (err, doc) {
+    if (err) {
+      return res.status(500).send('Order not found');
+    }
+    doc.status = "accepted";
+
+    var emailBody = createEmail(
+      doc.customerEmail,
+      "We're on our way!",
+      `Thank You for accepting our quote, We're on our way with your order!`
+    );
+
+    doc.save(function (err) {
+      if (err) {
+        return res.status(500).send('db save failed');
+      }
+      transporter.sendMail(emailBody, err => {
+        if (err) {
+          res.status(500).send(err);
+        } else {
+          res.sendStatus(200);
+        }
+      });
+    });
+  });
 }

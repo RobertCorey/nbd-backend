@@ -9,6 +9,6 @@ var foo = new db.Order({}).save(function(err) {
   if (err) {console.log(err);}
 });
 
-db.Order.find({}, function(err, data) {
+db.Order.findOne({_id: "5b251f5453fa583200845262"}, function(err, data) {
   console.log(data);
 })
