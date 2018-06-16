@@ -19,7 +19,8 @@ var orderSchema = new Schema({
         }
       },
       required:[true, 'Please enter a customer name']
-    },
+    }
+  },
 
   customerEmail: {
     type: String,
@@ -49,24 +50,29 @@ var orderSchema = new Schema({
     type: Object,
     required: [true, 'Please enter a start address']
   },
+
   endAddress: {
-  type: Object,
-  required : [true, 'Please enter a end address']
-},
-  Details: {
+    type: Object,
+    required : [true, 'Please enter a end address']
+  },
+
+  details: {
     type: String,
     required: [true, 'Please enter a description']
   },
+
   cost: {
     type: Number,
-    required: [true, 'Please enter a cose']
-    default:-1,
+    required: [true, 'Please enter a cost'],
+    default:-1
   },
+
   status: {
     type: String,
     default: 'new',
     enum: ['new', 'quoted', 'accepted', 'rejected', 'fulfilled']
   },
+  
   createdOn: {type: Date, default: Date.now()}
 });
 
