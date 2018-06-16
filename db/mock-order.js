@@ -1,10 +1,9 @@
 exports.panini = {
   "customerName": "Robert Corey",
   "customerEmail": "robertbcorey@gmail.com",
-  "customerPhone": "4015555555",
-  "Details": "1 sandwhich please",
+  "customerPhone": "401-555-5555",
+  "details": "1 sandwhich please",
   "status": "new",
-  "cost": "50",
   "startAddress": {
     "address_components": [
       {
