@@ -15,7 +15,7 @@ app.get('/customerRejectOrder', ctrls.customerRejectOrder);
 
 app.post('/getAllOrders', ctrls.getAllOrders);
 app.post('/updateQuote', ctrls.updateQuote);
-app.post('/adminRejectOrder', ctrls.rejectOrder);
+app.post('/adminRejectOrder', ctrls.adminRejectOrder);
 app.post('/fulfillOrder', ctrls.fulfillOrder);
 
 app.listen('8080');
