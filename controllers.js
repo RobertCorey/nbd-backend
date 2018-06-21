@@ -58,6 +58,7 @@ exports.updateQuote = function (req, res) {
       return res.status(500).send('Order not found');
     }
     doc.cost = cost;
+    doc.state = 'quoted';
 
     var emailBody = createEmail(
       doc.customerEmail,
