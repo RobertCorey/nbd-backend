@@ -10,6 +10,7 @@ app.get('/', (req, res) => {
 })
 
 app.post('/createOrder', ctrls.createOrder);
+app.get('/getOrder', ctrls.getOrder);
 app.get('/customerAcceptOrder', ctrls.customerAcceptOrder);
 app.get('/customerRejectOrder', ctrls.customerRejectOrder);
 

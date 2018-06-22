@@ -29,7 +29,9 @@ exports.createOrder = function (req, res) {
     if (err) {
       res.status(400).send(err);
     } else {
-      var emailBody = createEmail('robertbcorey@gmail.com', 'hellofromnewportbike', 'hi were sending you an email');
+      var emailBody = createEmail(data.email, 'Newport Bike Delivery Has Received Your Order',
+      `Hi we have received your order, you will receive another email shortly with the cost of your order.
+      You NEED to accept this cost before we begin delivery. Thanks for using Newport Bike Delivery`);
       transporter.sendMail(emailBody, err => {
         if (err) {
           res.sendStatus(400);
@@ -41,6 +43,15 @@ exports.createOrder = function (req, res) {
   });
 }
 
+exports.getOrder = function (req, res) {
+  db.Order.findOne({'_id': decodeURIComponent(req.query.id)}, function (err, data) {
+    if (err) {
+      res.sendStatus(500);
+    } else {
+      res.json(data);
+    }
+  });
+}
 exports.getAllOrders = function (req, res) {
   db.Order.find({}, function (err, data) {
     if (err) {
@@ -63,16 +74,17 @@ exports.updateQuote = function (req, res) {
     doc.cost = cost;
     doc.state = 'quoted';
 
-    var emailBody = createEmail(
-      doc.customerEmail,
-      "Attention Required! Your Newport Bike Delivery Order has been estimated. You need to approve it before delivery!",
-      `The amount is: ${doc.cost}`
-    );
-
     doc.save(function (err) {
       if (err) {
         return res.status(500).send('db save failed');
       }
+
+      var emailBody = createEmail(
+        doc.customerEmail,
+        "Attention Required! Your Newport Bike Delivery Order has been estimated. You need to approve it before delivery!",
+        `The cost of the order is: ${doc.cost}.<a href="newportbikedelivery.com/order-view.html?id=${id}"> Click Here </a> to accept or to decline the order.`
+      );
+
       transporter.sendMail(emailBody, err => {
         if (err) {
           res.status(500).send(err);
@@ -146,8 +158,7 @@ exports.fulfillOrder = function (req, res) {
 }
 
 exports.customerRejectOrder = function (req, res) {
-  let id = req.query.id,
-    message = req.body.message;
+  let id = req.query.id;
   if(!id.match(/^[0-9a-fA-F]{24}$/)) {return res.status(500).send('bad id');}
 
   db.Order.findById(id, function (err, doc) {
@@ -158,8 +169,8 @@ exports.customerRejectOrder = function (req, res) {
 
     var emailBody = createEmail(
       doc.customerEmail,
-      "You have rejected the quote we provided"
-      `Sorry we were not able to accomodate your request. Try texting or calling 4012398922 to talk to a real person.`
+      "You have rejected the quote we provided",
+      "Sorry we were not able to accomodate your request. Try texting or calling 4012398922 to talk to a real person."
     );
 
     doc.save(function (err) {
@@ -178,8 +189,7 @@ exports.customerRejectOrder = function (req, res) {
 }
 
 exports.customerAcceptOrder = function (req, res) {
-  let id = req.query.id,
-    message = req.body.message;
+  let id = req.query.id;
   if(!id.match(/^[0-9a-fA-F]{24}$/)) {return res.status(500).send('bad id');}
 
   db.Order.findById(id, function (err, doc) {
