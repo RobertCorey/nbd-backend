@@ -21,10 +21,13 @@ function createEmail(to, subject, html) {
 
 
 exports.createOrder = function (req, res) {
+  let data = req.body;
+  data.startAddress.url = decodeURIComponent(data.startAddress.url);
+  data.endAddress.url = decodeURIComponent(data.endAddress.url);
   //TODO backend validation goes here
-  new db.Order(req.body).save(err => {
+  new db.Order(data).save(err => {
     if (err) {
-      res.sendStatus(400);
+      res.status(400).send(err);
     } else {
       var emailBody = createEmail('robertbcorey@gmail.com', 'hellofromnewportbike', 'hi were sending you an email');
       transporter.sendMail(emailBody, err => {
@@ -205,3 +208,4 @@ exports.customerAcceptOrder = function (req, res) {
     });
   });
 }
+
